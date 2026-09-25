@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#06110d">
+
+<title>Invest with Henry</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+    overflow-x: hidden;
+    background: #030806;
+}
+
+/* Animated background */
+
+.background {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    z-index: -2;
+    background:
+        radial-gradient(circle at 20% 10%, rgba(0,255,153,.18), transparent 30%),
+        radial-gradient(circle at 85% 25%, rgba(0,180,255,.12), transparent 28%),
+        radial-gradient(circle at 50% 100%, rgba(0,255,153,.08), transparent 35%),
+        #030806;
+}
+
+.glow {
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: .25;
+    animation: float 9s infinite alternate ease-in-out;
+}
+
+.glow.one {
+    background: #00ff9d;
+    top: -100px;
+    left: -100px;
+}
+
+.glow.two {
+    background: #008cff;
+    right: -100px;
+    top: 30%;
+    animation-delay: 2s;
+}
+
+.glow.three {
+    background: #00ff9d;
+    bottom: -150px;
+    left: 30%;
+    animation-delay: 4s;
+}
+
+@keyframes float {
+    from {
+        transform: translate(0,0) scale(1);
+    }
+    to {
+        transform: translate(50px,40px) scale(1.25);
+    }
+}
+
+/* Grid */
+
+.grid {
+    position: absolute;
+    inset: 0;
+    opacity: .08;
+    background-image:
+        linear-gradient(rgba(255,255,255,.25) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.25) 1px, transparent 1px);
+    background-size: 45px 45px;
+    mask-image: linear-gradient(to bottom, black, transparent);
+}
+
+/* Main */
+
+.container {
+    width: 100%;
+    max-width: 480px;
+    margin: auto;
+    padding: 35px 18px 30px;
+}
+
+/* Profile */
+
+.profile {
+    text-align: center;
+}
+
+.photo-wrapper {
+    position: relative;
+    width: 112px;
+    height: 112px;
+    margin: 0 auto 18px;
+}
+
+.photo {
+    width: 112px;
+    height: 112px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #00e88a;
+    padding: 3px;
+    background: #07150f;
+    box-shadow:
+        0 0 25px rgba(0,232,138,.35),
+        0 0 70px rgba(0,232,138,.12);
+}
+
+.verified {
+    position: absolute;
+    right: -3px;
+    bottom: 5px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #1689ff;
+    border: 3px solid #030806;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 29px;
+    font-weight: 800;
+    letter-spacing: -.7px;
+}
+
+.subtitle {
+    margin-top: 9px;
+    color: #a9b8b1;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Investment ticker */
+
+.ticker {
+    margin: 27px 0 18px;
+    padding: 13px 16px;
+    border-radius: 14px;
+    background: rgba(255,255,255,.055);
+    border: 1px solid rgba(255,255,255,.09);
+    backdrop-filter: blur(15px);
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.ticker-content {
+    display: inline-block;
+    animation: ticker 18s linear infinite;
+    color: #8dfac5;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+@keyframes ticker {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+/* Chart */
+
+.chart-card {
+    position: relative;
+    height: 130px;
+    margin-bottom: 20px;
+    padding: 18px;
+    border-radius: 18px;
+    background: linear-gradient(
+        135deg,
+        rgba(0,255,153,.08),
+        rgba(255,255,255,.035)
+    );
+    border: 1px solid rgba(255,255,255,.09);
+    overflow: hidden;
+}
+
+.chart-title {
+    position: relative;
+    z-index: 2;
+    font-size: 12px;
+    color: #93a49d;
+}
+
+.chart-value {
+    position: relative;
+    z-index: 2;
+    margin-top: 5px;
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.chart-value span {
+    color: #00e88a;
+    font-size: 12px;
+    margin-left: 6px;
+}
+
+.chart {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 75px;
+    opacity: .75;
+}
+
+.chart svg {
+    width: 100%;
+    height: 100%;
+}
+
+.chart-line {
+    fill: none;
+    stroke: #00e88a;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 0 5px rgba(0,232,138,.6));
+}
+
+/* Buttons */
+
+.links {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 72px;
+    padding: 12px 18px;
+    text-decoration: none;
+    color: white;
+    border-radius: 18px;
+    overflow: hidden;
+    transition: .25s ease;
+    border: 1px solid rgba(255,255,255,.13);
+    box-shadow: 0 12px 30px rgba(0,0,0,.25);
+}
+
+.link:hover {
+    transform: translateY(-4px);
+}
+
+.link:active {
+    transform: scale(.98);
+}
+
+.telegram {
+    background: linear-gradient(135deg, #159bd7, #0876b9);
+}
+
+.signal {
+    background: linear-gradient(135deg, #5667bd, #38458d);
+}
+
+.link-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background: rgba(255,255,255,.16);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 23px;
+    margin-right: 15px;
+}
+
+.link-text {
+    text-align: left;
+    flex: 1;
+}
+
+.link-title {
+    display: block;
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.link-subtitle {
+    display: block;
+    margin-top: 4px;
+    font-size: 11px;
+    opacity: .78;
+}
+
+.arrow {
+    font-size: 22px;
+    opacity: .8;
+}
+
+/* Trust section */
+
+.trust {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 9px;
+    margin-top: 18px;
+}
+
+.trust-box {
+    padding: 13px 5px;
+    text-align: center;
+    border-radius: 14px;
+    background: rgba(255,255,255,.045);
+    border: 1px solid rgba(255,255,255,.07);
+}
+
+.trust-number {
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.trust-label {
+    display: block;
+    margin-top: 4px;
+    color: #84938d;
+    font-size: 9px;
+}
+
+/* Footer */
+
+.footer {
+    text-align: center;
+    margin-top: 27px;
+    color: #596660;
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+@media (max-width: 380px) {
+    h1 {
+        font-size: 25px;
+    }
+
+    .container {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="background">
+    <div class="grid"></div>
+    <div class="glow one"></div>
+    <div class="glow two"></div>
+    <div class="glow three"></div>
+</div>
+
+<main class="container">
+
+    <!-- PROFILE -->
+
+    <section class="profile">
+
+        <div class="photo-wrapper">
+
+            <!-- Replace profile.jpg with your actual photo -->
+            <img
+                src="/storage/emulated/0/Invest with henry/profile.jpg/profile.jpg"
+                alt="Henry"
+                class="photo"
+            >
+
+            <div class="verified">✓</div>
+
+        </div>
+
+        <h1>Invest with Henry</h1>
+
+        <p class="subtitle">
+            Investment insights, opportunities & direct communication.
+        </p>
+
+    </section>
+
+
+    <!-- MARKET TICKER -->
+
+    <div class="ticker">
+        <div class="ticker-content">
+            📈 MARKETS • INVESTMENT • FINANCIAL GROWTH • OPPORTUNITIES • 📊
+        </div>
+    </div>
+
+
+    <!-- CHART CARD -->
+
+    <div class="chart-card">
+
+        <div class="chart-title">
+            MARKET OVERVIEW
+        </div>
+
+        <div class="chart-value">
+            Growth Mindset
+            <span>↗ Positive</span>
+        </div>
+
+        <div class="chart">
+
+            <svg viewBox="0 0 500 100"
+                 preserveAspectRatio="none">
+
+                <polyline
+                    class="chart-line"
+                    points="
+                    0,85
+                    35,76
+                    65,82
+                    95,58
+                    125,65
+                    155,48
+                    190,55
+                    220,32
+                    250,45
+                    280,28
+                    310,37
+                    345,20
+                    380,30
+                    415,14
+                    450,20
+                    500,5
+                    "
+                />
+
+            </svg>
+
+        </div>
+
+    </div>
+
+
+    <!-- SOCIAL LINKS -->
+
+    <section class="links">
+
+        <a
+            href="https://t.me/Sopfia_Trust_support"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="link telegram"
+        >
+
+            <div class="link-icon">
+                ✈️
+            </div>
+
+            <div class="link-text">
+                <span class="link-title">
+                    Telegram
+                </span>
+
+                <span class="link-subtitle">
+                    Chat with me directly
+                </span>
+            </div>
+
+            <div class="arrow">
+                →
+            </div>
+
+        </a>
+
+
+        <a
+            href="https://signal.me/#eu/KSdAG2Q_UeKr5_WMZXnFlR4211qzCr1eCknMae9y8iT2qwbHhKdH_qxOLlXNlTcj"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="link signal"
+        >
+
+            <div class="link-icon">
+                🔐
+            </div>
+
+            <div class="link-text">
+                <span class="link-title">
+                    Signal
+                </span>
+
+                <span class="link-subtitle">
+                    Send me a private message
+                </span>
+            </div>
+
+            <div class="arrow">
+                →
+            </div>
+
+        </a>
+
+    </section>
+
+
+    <!-- TRUST / INFO -->
+
+    <section class="trust">
+
+        <div class="trust-box">
+            <div class="trust-number">💬</div>
+            <span class="trust-label">DIRECT CHAT</span>
+        </div>
+
+        <div class="trust-box">
+            <div class="trust-number">🔐</div>
+            <span class="trust-label">PRIVATE</span>
+        </div>
+
+        <div class="trust-box">
+            <div class="trust-number">📊</div>
+            <span class="trust-label">INSIGHTS</span>
+        </div>
+
+    </section>
+
+
+    <footer class="footer">
+
+        © 2026 Invest with Henry<br>
+
+        Investment involves risk. Make informed decisions.
+
+    </footer>
+
+</main>
+
+</body>
+</html>
